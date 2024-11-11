@@ -78,6 +78,7 @@ struct AuthorsPoemsView: View {
                             } label: {
                                 
                                 PoemCardView(poem: poem)
+                                    .tint(.black)
                             }
                             
                             

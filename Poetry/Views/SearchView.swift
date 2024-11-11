@@ -37,30 +37,57 @@ struct SearchView: View {
                     .bold()
                     .padding(.horizontal)
                 
-                TextField("Search", text: $searchText)
-                    .onSubmit {
+                HStack{
+                    TextField("Search", text: $searchText)
+                        .onSubmit {
+                            searchResult = []
+                            fetchSearch()
+                        }
+                        .frame(height: 50)
+                        .background(.gray.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
+                        .padding()
+                    
+                    Button {
                         searchResult = []
                         fetchSearch()
+                    } label: {
+                        Text("Submit")
+                            .padding()
+                            .foregroundStyle(.white)
+                            .background(.gray.opacity(searchText.isEmpty ? 0.2:1),in: .capsule)
                     }
-                    .frame(height: 50)
-                    .background(.gray, in: RoundedRectangle(cornerRadius: 10))
-                    .padding()
+                    .disabled(searchText.isEmpty)
+
+                }
                 
                 if !searchResult.isEmpty{
-                    List{
-                        
-                        ForEach(searchResult){ poem in
-                            VStack{
-                                PoemCardView(poem: poem)
+                   
+                    ScrollView{
+                        VStack(alignment: .center){
+                            ForEach(searchResult){ poem in
+                                
+                                NavigationLink {
+                                    
+                                    PoemView(poem: poem)
+                                    
+                                    
+                                } label: {
+                                    
+                                    PoemCardView(poem: poem)
+                                        .padding(.bottom)
+                                        .tint(.black)
+                                }
+                                
+                                
+                                
                                 
                             }
-                            
                         }
-                        
-                        
+                        .frame(maxWidth: .infinity)
                         
                     }
-                    .listStyle(.plain)
+                        
+                   
                 }
                 else{
                     VStack(alignment: .center){
@@ -70,6 +97,7 @@ struct SearchView: View {
                  
                 }
             }
+            .padding(.horizontal)
         }
         else
         {
